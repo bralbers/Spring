@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:component-scan
+		base-package="com.fdmgroup.springloginregisterexercise.controllers" />
+
+	<mvc:resources mapping="/resources/**" location="/resources/"
+		cache-period="31556926" />
+	<mvc:view-controller path="/" view-name="index" />
+	<mvc:annotation-driven />
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="userBean" class="com.fdmgroup.springloginregisterexercise.model.User"
+		scope="prototype"></bean>
+
+	<bean id="emf" class="javax.persistence.Persistence"
+		factory-method="createEntityManagerFactory" scope="singleton">
+		<constructor-arg type="java.lang.String" value="userDAO"></constructor-arg>
+	</bean>
+
+	<bean id="userDAOBean"
+		class="com.fdmgroup.springloginregisterexercise.persistence.UsersDAO"
+		scope="singleton">
+		<property name="emf" ref="emf"></property>
+	</bean>
+
+	<bean id="usernameExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String"
+			value="Username needs to be at least 5 characters"></constructor-arg>
+	</bean>
+	<bean id="passwordExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String"
+			value="Password must be at least 7 characters"></constructor-arg>
+	</bean>
+	<bean id="confirmPasswordExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String" value="Passwords must match"></constructor-arg>
+	</bean>
+	<bean id="firstNameExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String" value="Must supply first name"></constructor-arg>
+	</bean>
+	<bean id="lastNameExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String" value="Must supply last name"></constructor-arg>
+	</bean>
+	<bean id="emailExceptionBean"
+		class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String" value="Must supply an email"></constructor-arg>
+	</bean>
+	<bean id="usernameAlreadyExistsExceptionBean"
+	class="com.fdmgroup.springloginregisterexercise.exception.UserException">
+		<constructor-arg type="java.lang.String" value="Username already exists"></constructor-arg>
+	</bean>
+</beans>
